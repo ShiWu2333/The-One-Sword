@@ -1,36 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] BulletSpawner bulletSpawner;
     [SerializeField] Bullet bullet;
     [SerializeField] Animator animator;
+    [SerializeField] PlayerReflectModeUI playerReflectModeUI;
 
+    //血量相关
+    public SpriteRenderer[] hearts;
+    public Sprite fullHeartSprite; // 满心的图片
+    public Sprite emptyHeartSprite; // 空心的图片
+    private int playerHealth; //玩家生命值
+
+    //攻击判定相关数据
     public GameObject playerHitbox; //玩家的碰撞体积
     public GameObject attackHitbox; // 攻击的碰撞体积
+    public Collider2D perfectHit; //完美格挡点
     private Collider2D hitboxCollider;
     private Collider2D healthCollider;
     private float buttonPressTime; // 记录按键按下的时间
     private bool isPressingButton; // 记录按键是否被按下
     private bool isHeavyAttack;
     private bool isReflectMode;
-    private int playerHealth; //玩家生命值
     
-    private int reflectModeCharge;
-    private float reflectModeTime = 0;
+    
+    //超能mode相关数据
+    private float reflectModeCharge;
+    private bool canCharge;
+    [SerializeField] private float reflectModeMax;
+    [SerializeField] float reflectModeDuration;
+    private float chargeTimer;
 
 
     void Start()
     {
+        isReflectMode = false;
         playerHealth = 3;
         reflectModeCharge = 0;
+        canCharge = true;
 
         hitboxCollider = attackHitbox.GetComponent<Collider2D>();
         if (hitboxCollider != null)
         {
-            hitboxCollider.enabled = false; // 初始时禁用Hitbox
+            hitboxCollider.enabled = true; // 初始启用collider 2d
         }
 
         healthCollider = playerHitbox.GetComponent<Collider2D>();
@@ -40,20 +57,34 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (reflectModeCharge >= 2)
+        UpdateHealthUI();//更新玩家血量
+        playerReflectModeUI.UpdateChargeFill();//更新超能mode UI
+        
+
+        //玩家超能mode逻辑
+        if (reflectModeCharge >= reflectModeMax) //进入超能模式
         {
-            isReflectMode = true;
-            reflectModeTime = 3;
-            reflectModeCharge = 0;
-            if (reflectModeTime > 0)
+            canCharge = false; //不可以继续叠加能量
+            isReflectMode = true; //可以反弹攻击
+            chargeTimer = reflectModeDuration; //设置倒计时
+            Debug.Log("Refelct Mode!!");
+        }
+        
+        if (isReflectMode)
+        {
+            if (chargeTimer > 0) 
             {
-                reflectModeTime -= Time.deltaTime;
+                chargeTimer -= Time.deltaTime; //超能模式倒计时
+                reflectModeCharge = chargeTimer; //根据倒计时动态降低chargefill
+                Debug.Log("Reflect Mode Time : " + chargeTimer);
             }
-            if (reflectModeTime <= 0)
+            else //退出超能模式
             {
-                reflectModeTime = 0;
+                canCharge = true;
                 isReflectMode = false;
-                Debug.Log("Reflect Mode End.");
+                chargeTimer = 0;
+                reflectModeCharge = 0;
+                Debug.Log("Reflect Mode End!!");
             }
         }
 
@@ -76,17 +107,30 @@ public class PlayerController : MonoBehaviour
                 {
                     isHeavyAttack = false;
                     PerformLightAttack();
-                    animator.SetTrigger("LightAttack");
                 }
 
                 if (heldTime > 1f)
                 {
                     isHeavyAttack = true;
                     PerformHeavyAttack();
-                    animator.SetTrigger("HeavyAttack");
                 }
 
                 isPressingButton = false;
+            }
+        }
+    }
+
+    void UpdateHealthUI()
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            if (i < playerHealth)
+            {
+                hearts[i].sprite = fullHeartSprite;
+            }
+            else
+            {
+                hearts[i].sprite = emptyHeartSprite;
             }
         }
     }
@@ -95,12 +139,7 @@ public class PlayerController : MonoBehaviour
     {
         if (hitboxCollider !=null)
         {
-            hitboxCollider.enabled = true; // 启用Hitbox
-            Debug.Log("Heavy attack performed!");
-
-            // 你可以在这里加入攻击动画播放逻辑
-            // 暂停一段时间后禁用Hitbox
-            Invoke("DisableHitbox", 0.1f); // 0.1秒后禁用Hitbox，防止持续检测
+            animator.SetTrigger("HeavyAttack");
         }
     }
 
@@ -109,36 +148,20 @@ public class PlayerController : MonoBehaviour
     {
         if (hitboxCollider != null)
         {
-            hitboxCollider.enabled = true; // 启用Hitbox
-            Debug.Log("Light attack performed!");
-            
-
-            // 你可以在这里加入攻击动画播放逻辑
-            // 暂停一段时间后禁用Hitbox
-            Invoke("DisableHitbox", 0.1f); // 0.1秒后禁用Hitbox，防止持续检测
+            animator.SetTrigger("LightAttack");
         }
     }
 
-    void PerformPowerLightAttack()
-    {
 
-    }
-
-
-    // 禁用Hitbox
-    void DisableHitbox()
-    {
-        if (hitboxCollider != null)
-        {
-            hitboxCollider.enabled = false;
-        }
-    }
+    
 
     // 检测碰撞，并摧毁子弹
+
     void OnTriggerEnter2D(Collider2D other)
     {
         //Debug.Log("bullet is detected");
         bool hitSword = false;
+
         if (hitboxCollider.enabled)
         {
             // 检查碰撞对象是否为子弹
@@ -152,8 +175,17 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     Destroy(other.gameObject); // 销毁子弹
-                    Debug.Log("Bullet destroyed by light attack!");
-                    reflectModeCharge += 1;
+                    //Debug.Log("Bullet destroyed by light attack!");
+
+                    if (canCharge)
+                    {
+                        Vector2 bulletPosition = other.transform.position;
+
+                        reflectModeCharge += 1;
+                        Debug.Log(reflectModeCharge);
+
+                    }
+
                 }
                 hitSword = true;
             }
@@ -179,4 +211,15 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    public float GetReflectModeCharge()
+    { 
+        return reflectModeCharge;
+    }
+
+    public float GetReflectModeMax()
+    {
+        return reflectModeMax;
+    }
+
 }

@@ -20,7 +20,8 @@ public class Bullet : MonoBehaviour
     public void ReflectBullet()
     {
         bulletSpeed = bulletSpeed * -1;
-        Debug.Log("Bullet is reflected by heavy attach");
+        transform.Rotate(0, 0, 180);
+        Debug.Log("Bullet is reflected by heavy attack");
     }
 
 }

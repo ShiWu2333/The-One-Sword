@@ -4,17 +4,37 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private int enemyHealth;
+    [SerializeField] private EnemyHealth enemyHealth;
+    [SerializeField] private float enemyHealthCurrent;
+    [SerializeField] private float enemyHealthMax = 5;
     [SerializeField] GameObject bulletSpawner;
+
+    private void Start()
+    {
+        enemyHealthCurrent = enemyHealthMax;
+        enemyHealth.UpdateHealthBar();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        enemyHealth -= 1;
+        enemyHealthCurrent -= 1;
+        enemyHealth.UpdateHealthBar();
         Debug.Log("Enemy Hit!");
-        if (enemyHealth <= 0)
+        if (enemyHealthCurrent <= 0)
         {
             Debug.Log("Enemy is dead!");
             bulletSpawner.SetActive(false);
         }
+
+    }
+
+    public float GetEnemyHealthCurrent()
+    {
+        return enemyHealthCurrent;
+    }
+
+    public float GetEnemyHealthMax()
+    { 
+        return enemyHealthMax;
     }
 }

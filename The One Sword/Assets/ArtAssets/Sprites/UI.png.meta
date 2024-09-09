@@ -618,6 +618,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Heart
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 25
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e38b13c84e68f4645b0bbd887fa08d3c
+      internalID: -831771436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Heart0
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 25
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a78099a0751ffd4f9a5278521afa501
+      internalID: 742361140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -635,6 +677,8 @@ TextureImporter:
       Box 1: 1777749549
       Front 0: 1312383074
       Front 1: -1722126508
+      Heart: -831771436
+      Heart0: 742361140
       Icon 0: 891942287
       Joystick 0: 1328899968
       Joystick 1: -1798395208
