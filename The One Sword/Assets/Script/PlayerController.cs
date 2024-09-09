@@ -1,0 +1,182 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    [SerializeField] BulletSpawner bulletSpawner;
+    [SerializeField] Bullet bullet;
+    [SerializeField] Animator animator;
+
+    public GameObject playerHitbox; //玩家的碰撞体积
+    public GameObject attackHitbox; // 攻击的碰撞体积
+    private Collider2D hitboxCollider;
+    private Collider2D healthCollider;
+    private float buttonPressTime; // 记录按键按下的时间
+    private bool isPressingButton; // 记录按键是否被按下
+    private bool isHeavyAttack;
+    private bool isReflectMode;
+    private int playerHealth; //玩家生命值
+    
+    private int reflectModeCharge;
+    private float reflectModeTime = 0;
+
+
+    void Start()
+    {
+        playerHealth = 3;
+        reflectModeCharge = 0;
+
+        hitboxCollider = attackHitbox.GetComponent<Collider2D>();
+        if (hitboxCollider != null)
+        {
+            hitboxCollider.enabled = false; // 初始时禁用Hitbox
+        }
+
+        healthCollider = playerHitbox.GetComponent<Collider2D>();
+        healthCollider.enabled = true;
+
+    }
+
+    void Update()
+    {
+        if (reflectModeCharge >= 2)
+        {
+            isReflectMode = true;
+            reflectModeTime = 3;
+            reflectModeCharge = 0;
+            if (reflectModeTime > 0)
+            {
+                reflectModeTime -= Time.deltaTime;
+            }
+            if (reflectModeTime <= 0)
+            {
+                reflectModeTime = 0;
+                isReflectMode = false;
+                Debug.Log("Reflect Mode End.");
+            }
+        }
+
+        // 检测按键按下的时间
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            buttonPressTime = Time.time; // 记录按下时间
+            isPressingButton = true;
+        }
+
+        // 检测按键松开的时间
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            if (isPressingButton)
+            {
+                float heldTime = Time.time - buttonPressTime; // 计算按键持续时间
+
+                // 如果按下时间少于等于1秒，发动轻攻击
+                if (heldTime <= 1f)
+                {
+                    isHeavyAttack = false;
+                    PerformLightAttack();
+                    animator.SetTrigger("LightAttack");
+                }
+
+                if (heldTime > 1f)
+                {
+                    isHeavyAttack = true;
+                    PerformHeavyAttack();
+                    animator.SetTrigger("HeavyAttack");
+                }
+
+                isPressingButton = false;
+            }
+        }
+    }
+
+    void PerformHeavyAttack()
+    {
+        if (hitboxCollider !=null)
+        {
+            hitboxCollider.enabled = true; // 启用Hitbox
+            Debug.Log("Heavy attack performed!");
+
+            // 你可以在这里加入攻击动画播放逻辑
+            // 暂停一段时间后禁用Hitbox
+            Invoke("DisableHitbox", 0.1f); // 0.1秒后禁用Hitbox，防止持续检测
+        }
+    }
+
+    // 执行轻攻击
+    void PerformLightAttack()
+    {
+        if (hitboxCollider != null)
+        {
+            hitboxCollider.enabled = true; // 启用Hitbox
+            Debug.Log("Light attack performed!");
+            
+
+            // 你可以在这里加入攻击动画播放逻辑
+            // 暂停一段时间后禁用Hitbox
+            Invoke("DisableHitbox", 0.1f); // 0.1秒后禁用Hitbox，防止持续检测
+        }
+    }
+
+    void PerformPowerLightAttack()
+    {
+
+    }
+
+
+    // 禁用Hitbox
+    void DisableHitbox()
+    {
+        if (hitboxCollider != null)
+        {
+            hitboxCollider.enabled = false;
+        }
+    }
+
+    // 检测碰撞，并摧毁子弹
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        //Debug.Log("bullet is detected");
+        bool hitSword = false;
+        if (hitboxCollider.enabled)
+        {
+            // 检查碰撞对象是否为子弹
+            Bullet bullet = other.GetComponent<Bullet>();
+            if (bullet != null)
+            {
+                if (isHeavyAttack || isReflectMode)
+                {
+                    bullet.ReflectBullet();
+                }
+                else
+                {
+                    Destroy(other.gameObject); // 销毁子弹
+                    Debug.Log("Bullet destroyed by light attack!");
+                    reflectModeCharge += 1;
+                }
+                hitSword = true;
+            }
+
+        }
+
+        if (!hitSword && healthCollider.enabled)
+        {
+            Bullet bullet = other.GetComponent<Bullet>();
+            if (bullet != null)
+            {
+                playerHealth -= 1;
+                Debug.Log("Player hit! Remaining health: " + playerHealth);
+
+                Destroy(other.gameObject);
+
+                // 可以在这里添加玩家死亡或其他相关的逻辑
+                if (playerHealth <= 0)
+                {
+                    Debug.Log("Player is dead!");
+
+                }
+            }
+        }
+    }
+}
