@@ -634,7 +634,7 @@ MonoBehaviour:
   heavyBullet: {fileID: 4479650082036837233, guid: 1de2863e47d39e5469f6cce560c03877, type: 3}
   spawnPoint: {fileID: 879780124}
   bulletSpeed: 1
-  spawnRate: 1
+  spawnRate: 2
 --- !u!4 &319893294
 Transform:
   m_ObjectHideFlags: 0
@@ -1542,7 +1542,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpawner: {fileID: 319893293}
-  bullet: {fileID: 187604879796502248, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
   animator: {fileID: 303664349}
   playerReflectModeUI: {fileID: 79649849}
   hearts:
@@ -2364,13 +2363,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: HeavyBullet
       objectReference: {fileID: 0}
+    - target: {fileID: 5562290788603469904, guid: 1de2863e47d39e5469f6cce560c03877, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8900438126610089857, guid: 1de2863e47d39e5469f6cce560c03877, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.05
+      value: -9.39
       objectReference: {fileID: 0}
     - target: {fileID: 8900438126610089857, guid: 1de2863e47d39e5469f6cce560c03877, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.88
+      value: 2.79
       objectReference: {fileID: 0}
     - target: {fileID: 8900438126610089857, guid: 1de2863e47d39e5469f6cce560c03877, type: 3}
       propertyPath: m_LocalPosition.z

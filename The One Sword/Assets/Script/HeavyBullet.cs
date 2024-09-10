@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeavyBullet : MonoBehaviour
+public class HeavyBullet : BaseBullet
 {
     public Vector2 initialVelocity = new Vector2(5, 10); // ³õËÙ¶È (2D)
     private Rigidbody2D rb2D;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class NomralBullet : BaseBullet
 {
     [SerializeField] private int bulletSpeed = 1;
     
@@ -17,7 +17,7 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    public void ReflectBullet()
+    public override void ReflectHit()
     {
         bulletSpeed = bulletSpeed * -1;
         transform.Rotate(0, 0, 180);

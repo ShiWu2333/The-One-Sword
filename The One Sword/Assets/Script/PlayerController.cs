@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] BulletSpawner bulletSpawner;
-    [SerializeField] Bullet bullet;
     [SerializeField] Animator animator;
     [SerializeField] PlayerReflectModeUI playerReflectModeUI;
 
@@ -165,16 +164,16 @@ public class PlayerController : MonoBehaviour
         if (hitboxCollider.enabled)
         {
             // 检查碰撞对象是否为子弹
-            Bullet bullet = other.GetComponent<Bullet>();
+            BaseBullet bullet = other.GetComponent<BaseBullet>();
             if (bullet != null)
             {
                 if (isHeavyAttack || isReflectMode)
                 {
-                    bullet.ReflectBullet();
+                    bullet.ReflectHit();
                 }
                 else
                 {
-                    Destroy(other.gameObject); // 销毁子弹
+                    bullet.OnHit(); // 销毁子弹
                     //Debug.Log("Bullet destroyed by light attack!");
 
                     if (canCharge)
@@ -194,7 +193,7 @@ public class PlayerController : MonoBehaviour
 
         if (!hitSword && healthCollider.enabled)
         {
-            Bullet bullet = other.GetComponent<Bullet>();
+            BaseBullet bullet = other.GetComponent<BaseBullet>();
             if (bullet != null)
             {
                 playerHealth -= 1;
