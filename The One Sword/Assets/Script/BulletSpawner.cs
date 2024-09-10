@@ -23,8 +23,7 @@ public class BulletSpawner : MonoBehaviour
     [SerializeField] private float traMaxHeight;
     [SerializeField] private float spawnRate = 3;
     [SerializeField] private Transform target;
-    [SerializeField] private AnimationCurve yTraAniCurve;
-    [SerializeField] private AnimationCurve xTraAniCurve;
+    [SerializeField] private AnimationCurve traAniCurve;
     [SerializeField] private AnimationCurve axisCorrectionAniCurve;
     [SerializeField] private AnimationCurve speedAniCurve;
 
@@ -65,7 +64,7 @@ public class BulletSpawner : MonoBehaviour
         {
             BaseBullet bullet = Instantiate(bulletToSpawn, spawnPoint.transform.position, spawnPoint.transform.rotation).GetComponent<BaseBullet>();
             bullet.InitializeBullet(target, maxBulletSpeed, traMaxHeight);
-            bullet.InitializeAniCurve(yTraAniCurve, xTraAniCurve, axisCorrectionAniCurve, speedAniCurve);
+            bullet.InitializeAniCurve(traAniCurve, axisCorrectionAniCurve, speedAniCurve);
         }
         
     }

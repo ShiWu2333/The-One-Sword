@@ -8,7 +8,7 @@ public class NomralBullet : BaseBullet
     private float maxBulletSpeed;
     private float traMaxRelativeHeight;
     private Transform target;
-    private AnimationCurve yTraAniCurve;
+    private AnimationCurve traAniCurve;
     private AnimationCurve xTraAniCurve;
     private AnimationCurve axisCorrectionAniCurve;
     private AnimationCurve speedAniCurve;
@@ -45,7 +45,7 @@ public class NomralBullet : BaseBullet
         float nextPositionX = transform.position.x + bulletSpeed * Time.deltaTime; // 下一个x坐标点在世界中的位置
         float nextPositionXNormalized = (nextPositionX - traStartPoint.x) / traRange.x; //下一个x坐标点在曲线中的绝对位置
 
-        float nextPositionYNormalized = yTraAniCurve.Evaluate(nextPositionXNormalized); //通过x坐标点的位置，倒推出y坐标点在曲线中的位置
+        float nextPositionYNormalized = traAniCurve.Evaluate(nextPositionXNormalized); //通过x坐标点的位置，倒推出y坐标点在曲线中的位置
         float nextPositionYCorrectionNormalized = axisCorrectionAniCurve.Evaluate(nextPositionXNormalized);
 
         float nextPositionYCorrection = nextPositionYCorrectionNormalized * traRange.y;
@@ -84,9 +84,9 @@ public class NomralBullet : BaseBullet
         this.traMaxRelativeHeight = Mathf.Abs(xDistanceToTarget) * traMaxHeight;
     }
 
-    public override void InitializeAniCurve(AnimationCurve yTraAniCurve, AnimationCurve xTraAniCurve, AnimationCurve axisCorrectionAniCurve, AnimationCurve speedAniCurve)
+    public override void InitializeAniCurve(AnimationCurve traAniCurve, AnimationCurve axisCorrectionAniCurve, AnimationCurve speedAniCurve)
     {
-        this.yTraAniCurve = yTraAniCurve;
+        this.traAniCurve = traAniCurve;
         this.axisCorrectionAniCurve = axisCorrectionAniCurve;
         this.speedAniCurve = speedAniCurve;
     }

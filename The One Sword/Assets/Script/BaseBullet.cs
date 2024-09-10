@@ -22,7 +22,7 @@ public class BaseBullet : MonoBehaviour
         Debug.Log("Bullet is Initialized");
     }
 
-    public virtual void InitializeAniCurve(AnimationCurve yTraAniCurve, AnimationCurve xTraAniCurve, AnimationCurve axisCorrectionAniCurve, AnimationCurve speedAniCurve)
+    public virtual void InitializeAniCurve(AnimationCurve yTraAniCurve, AnimationCurve axisCorrectionAniCurve, AnimationCurve speedAniCurve)
     {
         
     }
