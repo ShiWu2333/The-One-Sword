@@ -58,6 +58,8 @@ public class PlayerController : MonoBehaviour
     {
         UpdateHealthUI();//更新玩家血量
         playerReflectModeUI.UpdateChargeFill();//更新超能mode UI
+        int currentCombo = animator.GetInteger("Combo");
+        Debug.Log("CurentCombo = " + currentCombo);
         
 
         //玩家超能mode逻辑
@@ -106,6 +108,15 @@ public class PlayerController : MonoBehaviour
                 {
                     isHeavyAttack = false;
                     PerformLightAttack();
+                    if (currentCombo == 0)
+                    {
+                        currentCombo = 1;
+                    }
+                    else
+                    {
+                        currentCombo = 0;
+                    }
+                    animator.SetInteger("Combo", currentCombo);
                 }
 
                 if (heldTime > 0.5f)
