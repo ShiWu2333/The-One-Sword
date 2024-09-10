@@ -17,4 +17,19 @@ public class BaseBullet : MonoBehaviour
         Debug.Log("Bullet is reflected by heavy attack");
     }
 
+    public virtual void InitializeBullet(Transform target, float bulletSpeed, float traMaxHeight)
+    {
+        Debug.Log("Bullet is Initialized");
+    }
+
+    public virtual void InitializeAniCurve(AnimationCurve yTraAniCurve, AnimationCurve xTraAniCurve, AnimationCurve axisCorrectionAniCurve, AnimationCurve speedAniCurve)
+    {
+        
+    }
+
+    public virtual Vector3 GetBulletMoveDir()
+    { 
+        return Vector3.zero;
+    }
+
 }

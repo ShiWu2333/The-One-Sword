@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BulletSpawner : MonoBehaviour
@@ -18,8 +19,14 @@ public class BulletSpawner : MonoBehaviour
     private float timer = 0;
     private GameObject bulletToSpawn;
 
-    [SerializeField] private int bulletSpeed;
+    [SerializeField] private float maxBulletSpeed;
+    [SerializeField] private float traMaxHeight;
     [SerializeField] private float spawnRate = 3;
+    [SerializeField] private Transform target;
+    [SerializeField] private AnimationCurve yTraAniCurve;
+    [SerializeField] private AnimationCurve xTraAniCurve;
+    [SerializeField] private AnimationCurve axisCorrectionAniCurve;
+    [SerializeField] private AnimationCurve speedAniCurve;
 
     private void Start()
     {
@@ -56,7 +63,9 @@ public class BulletSpawner : MonoBehaviour
         // 确保选择了一个子弹
         if (bulletToSpawn != null)
         {
-            Instantiate(bulletToSpawn, spawnPoint.transform.position, spawnPoint.transform.rotation);
+            BaseBullet bullet = Instantiate(bulletToSpawn, spawnPoint.transform.position, spawnPoint.transform.rotation).GetComponent<BaseBullet>();
+            bullet.InitializeBullet(target, maxBulletSpeed, traMaxHeight);
+            bullet.InitializeAniCurve(yTraAniCurve, xTraAniCurve, axisCorrectionAniCurve, speedAniCurve);
         }
         
     }

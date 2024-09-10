@@ -4,12 +4,28 @@ using UnityEngine;
 
 public class NomralBullet : BaseBullet
 {
-    [SerializeField] private int bulletSpeed = 1;
-    
-    // Update is called once per frame
+    private float bulletSpeed;
+    private float maxBulletSpeed;
+    private float traMaxRelativeHeight;
+    private Transform target;
+    private AnimationCurve yTraAniCurve;
+    private AnimationCurve xTraAniCurve;
+    private AnimationCurve axisCorrectionAniCurve;
+    private AnimationCurve speedAniCurve;
+
+    private Vector3 traStartPoint;
+    private Vector3 bulletMoveDir;
+
+    private void Start()
+    {
+        traStartPoint = transform.position;
+    }
+
     void Update()
     {
-        transform.position += Vector3.left * bulletSpeed * Time.deltaTime;
+        UpdateBulletPosition();
+        /*Vector3 moveDirNormalized = (target.position - transform.position).normalized;
+        transform.position += moveDirNormalized * bulletSpeed * Time.deltaTime;*/
 
         if (transform.position.x < -12)
         {
@@ -17,11 +33,67 @@ public class NomralBullet : BaseBullet
         }
     }
 
+    private void UpdateBulletPosition()
+    {
+        Vector3 traRange = target.position - traStartPoint;
+
+        if(traRange.x < 0)
+        {
+            bulletSpeed = -bulletSpeed;
+        }
+
+        float nextPositionX = transform.position.x + bulletSpeed * Time.deltaTime; // 下一个x坐标点在世界中的位置
+        float nextPositionXNormalized = (nextPositionX - traStartPoint.x) / traRange.x; //下一个x坐标点在曲线中的绝对位置
+
+        float nextPositionYNormalized = yTraAniCurve.Evaluate(nextPositionXNormalized); //通过x坐标点的位置，倒推出y坐标点在曲线中的位置
+        float nextPositionYCorrectionNormalized = axisCorrectionAniCurve.Evaluate(nextPositionXNormalized);
+
+        float nextPositionYCorrection = nextPositionYCorrectionNormalized * traRange.y;
+
+        float nextPositionY = traStartPoint.y + nextPositionYNormalized * traMaxRelativeHeight + nextPositionYCorrection; // 下一个y坐标点在世界中的位置
+
+        Vector3 newPosition = new Vector3(nextPositionX, nextPositionY, 0);
+
+        UpdateBulletSpeed(nextPositionXNormalized);
+        bulletMoveDir = newPosition - transform.position;
+
+        transform.position = newPosition;
+    }
+
+
+    private void UpdateBulletSpeed(float nextPositionXNormalized)
+    {
+        float nextMoveSpeedNomralized = speedAniCurve.Evaluate(nextPositionXNormalized);
+
+        bulletSpeed = nextMoveSpeedNomralized * maxBulletSpeed; 
+    }
+
     public override void ReflectHit()
     {
         bulletSpeed = bulletSpeed * -1;
         transform.Rotate(0, 0, 180);
         Debug.Log("Bullet is reflected by heavy attack");
+    }
+
+    public override void InitializeBullet(Transform target, float maxBulletSpeed, float traMaxHeight)
+    {
+        this.target = target;
+        this.maxBulletSpeed = maxBulletSpeed;
+
+        float xDistanceToTarget = target.position.x - transform.position.x;
+        this.traMaxRelativeHeight = Mathf.Abs(xDistanceToTarget) * traMaxHeight;
+    }
+
+    public override void InitializeAniCurve(AnimationCurve yTraAniCurve, AnimationCurve xTraAniCurve, AnimationCurve axisCorrectionAniCurve, AnimationCurve speedAniCurve)
+    {
+        this.yTraAniCurve = yTraAniCurve;
+        this.axisCorrectionAniCurve = axisCorrectionAniCurve;
+        this.speedAniCurve = speedAniCurve;
+    }
+
+    public override Vector3 GetBulletMoveDir()
+    { 
+    return bulletMoveDir;
     }
 
 }

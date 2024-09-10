@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
         UpdateHealthUI();//更新玩家血量
         playerReflectModeUI.UpdateChargeFill();//更新超能mode UI
         int currentCombo = animator.GetInteger("Combo");
-        Debug.Log("CurentCombo = " + currentCombo);
+        //Debug.Log("CurentCombo = " + currentCombo);
         
 
         //玩家超能mode逻辑
