@@ -4,10 +4,19 @@ using UnityEngine;
 
 public class BulletSpawner : MonoBehaviour
 {
-    public GameObject bullet;
+    public enum BulletType
+    {
+        Normal,
+        Heavy,
+    }
+
+    public BulletType bulletType;
+    public GameObject bullet; // 普通子弹的预制体
+    public GameObject heavyBullet; // 重型子弹的预制体
     public GameObject spawnPoint;
 
     private float timer = 0;
+    private GameObject bulletToSpawn;
 
     [SerializeField] private int bulletSpeed;
     [SerializeField] private float spawnRate = 3;
@@ -33,7 +42,23 @@ public class BulletSpawner : MonoBehaviour
 
     public void SpawnBullet()
     {
-        Instantiate(bullet, spawnPoint.transform.position, spawnPoint.transform.rotation);
+        GameObject bulletToSpawn = null;
+        switch (bulletType)
+        {
+            case BulletType.Normal:
+                bulletToSpawn = bullet;
+                break;
+            case BulletType.Heavy:
+                bulletToSpawn = heavyBullet;
+                break;
+        }
+
+        // 确保选择了一个子弹
+        if (bulletToSpawn != null)
+        {
+            Instantiate(bulletToSpawn, spawnPoint.transform.position, spawnPoint.transform.rotation);
+        }
+        
     }
 
     public void DestroyBullet()

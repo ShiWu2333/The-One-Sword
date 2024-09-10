@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class HeavyBullet : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Vector2 initialVelocity = new Vector2(5, 10); // 初速度 (2D)
+    private Rigidbody2D rb2D;
+
     void Start()
     {
-        
+        rb2D = GetComponent<Rigidbody2D>();
+
+        // 直接设置初速度
+        rb2D.velocity = initialVelocity;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if ( transform.position.y < -10 )
+        {
+            Destroy(gameObject);
+        }
     }
+
 }

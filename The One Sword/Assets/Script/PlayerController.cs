@@ -103,13 +103,13 @@ public class PlayerController : MonoBehaviour
                 float heldTime = Time.time - buttonPressTime; // 计算按键持续时间
 
                 // 如果按下时间少于等于1秒，发动轻攻击
-                if (heldTime <= 1f)
+                if (heldTime <= 0.5f)
                 {
                     isHeavyAttack = false;
                     PerformLightAttack();
                 }
 
-                if (heldTime > 1f)
+                if (heldTime > 0.5f)
                 {
                     isHeavyAttack = true;
                     PerformHeavyAttack();
