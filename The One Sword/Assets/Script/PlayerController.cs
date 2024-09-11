@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
                     animator.SetInteger("Combo", currentCombo);
                 }
 
-                if (heldTime > 0.5f)
+                if (heldTime > 0.2f)
                 {
                     isHeavyAttack = true;
                     PerformHeavyAttack();
