@@ -182,12 +182,10 @@ public class PlayerController : MonoBehaviour
             BaseBullet bullet = other.GetComponent<BaseBullet>();
             if (bullet != null)
             {
-                hitSword = true;
                 if (isHeavyAttack || isReflectMode)
                 {
                     bullet.OnHit();
                     Instantiate(bulletReflect, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    hitSword = false;
                 }
                 else
                 {
@@ -200,9 +198,11 @@ public class PlayerController : MonoBehaviour
 
                         reflectModeCharge += 1;
                         Debug.Log(reflectModeCharge);
-                        hitSword = false;
+
                     }
+
                 }
+                hitSword = true;
             }
 
         }
