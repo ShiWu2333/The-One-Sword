@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class BulletSpawner : MonoBehaviour
 {
+
+    //子弹发射的节奏列表
+    private float[] fireIntervals = { 1f, 1f, 0.5f, 0.5f, 0.5f };
+    private bool isFiring = false; // 添加一个标志位，防止重复启动协程
+
     public enum BulletType
     {
         Normal,
@@ -33,19 +38,15 @@ public class BulletSpawner : MonoBehaviour
 
     private void Start()
     {
-        if (canSpawn)
-        {
-            SpawnBullet();
-        }
-        
         PlayerController playerController = GetComponent<PlayerController>();
+        StartCoroutine(FireBulletGroup());
     }
 
 
     void Update()
     {
         //Debug.Log(timer);
-        if (canSpawn)
+        if (canSpawn && !isFiring)
         {
             if (timer < spawnRate)
             {
@@ -53,11 +54,22 @@ public class BulletSpawner : MonoBehaviour
             }
             else
             {
-                SpawnBullet();
+                StartCoroutine(FireBulletGroup());
                 timer = 0;
             }
         }
         
+    }
+
+    IEnumerator FireBulletGroup()
+    {
+        isFiring = true;
+        for (int i = 0; i < fireIntervals.Length; i++)
+        {
+            SpawnBullet();
+            yield return new WaitForSeconds(fireIntervals[i]); // 等待设定的间隔时间
+        }
+        isFiring = false;
     }
 
     public void SpawnBullet()
