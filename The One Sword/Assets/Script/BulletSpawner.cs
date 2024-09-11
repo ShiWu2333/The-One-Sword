@@ -26,24 +26,38 @@ public class BulletSpawner : MonoBehaviour
     [SerializeField] private AnimationCurve traAniCurve;
     [SerializeField] private AnimationCurve axisCorrectionAniCurve;
     [SerializeField] private AnimationCurve speedAniCurve;
+    
+
+    [SerializeField] private bool canSpawn;
+    [SerializeField] private GameObject player;
 
     private void Start()
     {
-        SpawnBullet();
+        if (canSpawn)
+        {
+            SpawnBullet();
+        }
+        
+        PlayerController playerController = GetComponent<PlayerController>();
     }
+
 
     void Update()
     {
         //Debug.Log(timer);
-        if (timer < spawnRate)
+        if (canSpawn)
         {
-            timer = timer + Time.deltaTime;
+            if (timer < spawnRate)
+            {
+                timer = timer + Time.deltaTime;
+            }
+            else
+            {
+                SpawnBullet();
+                timer = 0;
+            }
         }
-        else
-        {
-            SpawnBullet();
-            timer = 0;
-        }
+        
     }
 
     public void SpawnBullet()

@@ -9,7 +9,6 @@ public class NomralBullet : BaseBullet
     private float traMaxRelativeHeight;
     private Transform target;
     private AnimationCurve traAniCurve;
-    private AnimationCurve xTraAniCurve;
     private AnimationCurve axisCorrectionAniCurve;
     private AnimationCurve speedAniCurve;
 
@@ -27,7 +26,7 @@ public class NomralBullet : BaseBullet
         /*Vector3 moveDirNormalized = (target.position - transform.position).normalized;
         transform.position += moveDirNormalized * bulletSpeed * Time.deltaTime;*/
 
-        if (transform.position.x < -12)
+        if (transform.position.x < -100)
         {
             Destroy(gameObject);
         }
@@ -68,12 +67,6 @@ public class NomralBullet : BaseBullet
         bulletSpeed = nextMoveSpeedNomralized * maxBulletSpeed; 
     }
 
-    public override void ReflectHit()
-    {
-        bulletSpeed = bulletSpeed * -1;
-        transform.Rotate(0, 0, 180);
-        Debug.Log("Bullet is reflected by heavy attack");
-    }
 
     public override void InitializeBullet(Transform target, float maxBulletSpeed, float traMaxHeight)
     {

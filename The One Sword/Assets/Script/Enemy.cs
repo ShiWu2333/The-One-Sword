@@ -8,15 +8,25 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float enemyHealthCurrent;
     [SerializeField] private float enemyHealthMax = 5;
     [SerializeField] GameObject bulletSpawner;
+    private Collider2D enemyCollider;
 
     private void Start()
     {
         enemyHealthCurrent = enemyHealthMax;
         enemyHealth.UpdateHealthBar();
+        enemyCollider = GetComponent<Collider2D>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (enemyCollider != null)
+        {
+            BaseBullet bullet = collision.GetComponent<BaseBullet>();
+            if (bullet != null)
+            {
+                bullet.OnHit();
+            }
+        }
         enemyHealthCurrent -= 1;
         enemyHealth.UpdateHealthBar();
         Debug.Log("Enemy Hit!");
@@ -37,4 +47,5 @@ public class Enemy : MonoBehaviour
     { 
         return enemyHealthMax;
     }
+
 }

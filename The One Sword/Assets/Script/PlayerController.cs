@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,12 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+
     [SerializeField] BulletSpawner bulletSpawner;
     [SerializeField] Animator animator;
     [SerializeField] PlayerReflectModeUI playerReflectModeUI;
+    [SerializeField] BulletReflect bulletReflect;
+    [SerializeField] GameObject spawnPoint;
 
     //ÑªÁ¿Ïà¹Ø
     public SpriteRenderer[] hearts;
@@ -178,9 +182,12 @@ public class PlayerController : MonoBehaviour
             BaseBullet bullet = other.GetComponent<BaseBullet>();
             if (bullet != null)
             {
+                hitSword = true;
                 if (isHeavyAttack || isReflectMode)
                 {
-                    bullet.ReflectHit();
+                    bullet.OnHit();
+                    Instantiate(bulletReflect, spawnPoint.transform.position, spawnPoint.transform.rotation);
+                    hitSword = false;
                 }
                 else
                 {
@@ -193,11 +200,9 @@ public class PlayerController : MonoBehaviour
 
                         reflectModeCharge += 1;
                         Debug.Log(reflectModeCharge);
-
+                        hitSword = false;
                     }
-
                 }
-                hitSword = true;
             }
 
         }
