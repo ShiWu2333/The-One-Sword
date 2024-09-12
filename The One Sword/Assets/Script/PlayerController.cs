@@ -1,4 +1,4 @@
-using System;
+    using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour
                 float heldTime = Time.time - buttonPressTime; // 计算按键持续时间
 
                 // 如果按下时间少于等于1秒，发动轻攻击
-                if (heldTime <= 0.5f)
+                if (heldTime <= 0.2f)
                 {
                     isHeavyAttack = false;
                     PerformLightAttack();
