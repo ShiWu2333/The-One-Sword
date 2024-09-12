@@ -182,6 +182,15 @@ public class PlayerController : MonoBehaviour
             BaseBullet bullet = other.GetComponent<BaseBullet>();
             if (bullet != null)
             {
+                if (bullet.bulletType == BaseBullet.BulletType.NomralBullet)
+                {
+                    Debug.Log("normal bullet detected");
+                }
+                else if (bullet.bulletType == BaseBullet.BulletType.HeavyBullet)
+                {
+                    Debug.Log("Heavy Bullet Detected");
+                }
+
                 if (isHeavyAttack || isReflectMode)
                 {
                     bullet.OnHit();
