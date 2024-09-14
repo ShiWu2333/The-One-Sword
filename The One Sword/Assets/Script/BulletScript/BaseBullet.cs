@@ -11,7 +11,7 @@ public class BaseBullet : MonoBehaviour
     public virtual void OnHit()
     {
         // 默认行为：子弹被击中时销毁
-        Debug.Log("Bullet hit, destroyed.");
+        //Debug.Log("Bullet hit, destroyed.");
         Destroy(gameObject); // 销毁子弹
     }
 

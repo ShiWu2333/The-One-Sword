@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour
                 float heldTime = Time.time - buttonPressTime; // 计算按键持续时间
 
                 // 如果按下时间少于等于1秒，发动轻攻击
-                if (heldTime <= 0.2f)
+                if (heldTime <= 0.3f)
                 {
                     isHeavyAttack = false;
                     PerformLightAttack();
@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
                     animator.SetInteger("Combo", currentCombo);
                 }
 
-                if (heldTime > 0.2f)
+                if (heldTime > 0.3f)
                 {
                     isHeavyAttack = true;
                     PerformHeavyAttack();
@@ -185,35 +185,41 @@ public class PlayerController : MonoBehaviour
                 if (bullet.bulletType == BaseBullet.BulletType.NomralBullet)
                 {
                     Debug.Log("normal bullet detected");
-                }
-                else if (bullet.bulletType == BaseBullet.BulletType.HeavyBullet)
-                {
-                    Debug.Log("Heavy Bullet Detected");
-                }
+                    bullet.OnHit(); //如果是普通子弹被攻击直接销毁
+                    hitSword = true;
 
-                if (isHeavyAttack || isReflectMode)
-                {
-                    bullet.OnHit();
-                    Instantiate(bulletReflect, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                }
-                else
-                {
-                    bullet.OnHit(); // 销毁子弹
-                    //Debug.Log("Bullet destroyed by light attack!");
-
-                    if (canCharge)
+                    if (isReflectMode) //如果是反弹模式任何攻击都可以反弹
                     {
-                        Vector2 bulletPosition = other.transform.position;
-
+                        Instantiate(bulletReflect, spawnPoint.transform.position, spawnPoint.transform.rotation);
+                    }
+                    if (canCharge) //如果可以充能添加充能
+                    {
                         reflectModeCharge += 1;
                         Debug.Log(reflectModeCharge);
-
+                    };
+                }
+                else if (bullet.bulletType == BaseBullet.BulletType.HeavyBullet) 
+                {
+                    Debug.Log("heavy bullet detected");
+                    
+                    if (isReflectMode)
+                    {
+                        hitSword = true;
+                        bullet.OnHit();
+                        Instantiate(bulletReflect, spawnPoint.transform.position, spawnPoint.transform.rotation);
+                    }
+                    else if (isHeavyAttack)
+                    {
+                        hitSword |= true;
+                        bullet.OnHit();
+                    }
+                    else
+                    {
+                    hitSword |= false; 
                     }
 
                 }
-                hitSword = true;
             }
-
         }
 
         if (!hitSword && healthCollider.enabled)
