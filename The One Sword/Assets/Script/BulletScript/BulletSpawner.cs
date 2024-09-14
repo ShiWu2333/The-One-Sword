@@ -7,8 +7,8 @@ public class BulletSpawner : MonoBehaviour
 {
 
     //子弹发射的节奏列表
-    private float[] fireIntervals = { 1f, 1f, 0.5f, 0.5f, 0.5f };
-    private BulletType[] bulletSequence = { BulletType.Heavy, BulletType.Heavy, BulletType.Normal, BulletType.Normal, BulletType.Normal };
+    [SerializeField] BulletTemplate bulletTemplate;
+
     private bool isFiring = false; // 添加一个标志位，防止重复启动协程
 
     public enum BulletType
@@ -65,11 +65,11 @@ public class BulletSpawner : MonoBehaviour
     IEnumerator FireBulletGroup()
     {
         isFiring = true;
-        for (int i = 0; i < fireIntervals.Length; i++)
+        for (int i = 0; i < bulletTemplate.fireIntervals.Length; i++)
         {
-            BulletType currentBulletType = bulletSequence[i];
+            BulletType currentBulletType = bulletTemplate.bulletSequence[i];
             SpawnBullet(currentBulletType);
-            yield return new WaitForSeconds(fireIntervals[i]); // 等待设定的间隔时间
+            yield return new WaitForSeconds(bulletTemplate.fireIntervals[i]); // 等待设定的间隔时间
         }
         isFiring = false;
     }

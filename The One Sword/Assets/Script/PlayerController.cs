@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     private bool canCharge;
     [SerializeField] private float reflectModeMax;
     [SerializeField] float reflectModeDuration;
+    private float reflectModeChargeFill;
     private float chargeTimer;
 
 
@@ -46,6 +47,7 @@ public class PlayerController : MonoBehaviour
         playerHealth = 3;
         reflectModeCharge = 0;
         canCharge = true;
+        chargeTimer = reflectModeDuration; //设置倒计时
 
         hitboxCollider = attackHitbox.GetComponent<Collider2D>();
         if (hitboxCollider != null)
@@ -64,34 +66,35 @@ public class PlayerController : MonoBehaviour
         playerReflectModeUI.UpdateChargeFill();//更新超能mode UI
         int currentCombo = animator.GetInteger("Combo");
         //Debug.Log("CurentCombo = " + currentCombo);
-        
 
         //玩家超能mode逻辑
         if (reflectModeCharge >= reflectModeMax) //进入超能模式
         {
             canCharge = false; //不可以继续叠加能量
             isReflectMode = true; //可以反弹攻击
-            chargeTimer = reflectModeDuration; //设置倒计时
             Debug.Log("Refelct Mode!!");
+                if (chargeTimer > 0)
+                {
+                    chargeTimer -= Time.deltaTime; //超能模式倒计时
+                    Debug.Log(Time.deltaTime);
+                    Debug.Log("Reflect Mode Time : " + chargeTimer);
+                    reflectModeChargeFill = chargeTimer / reflectModeDuration; //根据倒计时动态降低chargefill
+
+                }
+                else //退出超能模式
+                {
+                    canCharge = true;
+                    isReflectMode = false;
+                    chargeTimer = 0;
+                    reflectModeCharge = 0;
+                    Debug.Log("Reflect Mode End!!");
+                }
+        }
+        else
+        {
+            reflectModeChargeFill = reflectModeCharge / reflectModeMax;
         }
         
-        if (isReflectMode)
-        {
-            if (chargeTimer > 0) 
-            {
-                chargeTimer -= Time.deltaTime; //超能模式倒计时
-                reflectModeCharge = chargeTimer; //根据倒计时动态降低chargefill
-                Debug.Log("Reflect Mode Time : " + chargeTimer);
-            }
-            else //退出超能模式
-            {
-                canCharge = true;
-                isReflectMode = false;
-                chargeTimer = 0;
-                reflectModeCharge = 0;
-                Debug.Log("Reflect Mode End!!");
-            }
-        }
 
         // 检测按键按下的时间
         if (Input.GetKeyDown(KeyCode.Space))
@@ -210,8 +213,13 @@ public class PlayerController : MonoBehaviour
                     }
                     else if (isHeavyAttack)
                     {
-                        hitSword |= true;
+                        hitSword = true;
                         bullet.OnHit();
+                        if (canCharge) //如果可以充能添加充能
+                        {
+                            reflectModeCharge += 1;
+                            Debug.Log(reflectModeCharge);
+                        };
                     }
                     else
                     {
@@ -242,14 +250,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public float GetReflectModeCharge()
+    public float GetReflectModeChargeFill()
     { 
-        return reflectModeCharge;
+        return reflectModeChargeFill;
     }
-
-    public float GetReflectModeMax()
-    {
-        return reflectModeMax;
-    }
-
 }

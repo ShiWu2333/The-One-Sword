@@ -2551,9 +2551,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8343863162262110181, guid: ce3ba62920762b6489f573377b16fd41, type: 3}
+      propertyPath: reflectModeMax
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343863162262110181, guid: ce3ba62920762b6489f573377b16fd41, type: 3}
       propertyPath: playerReflectModeUI
       value: 
       objectReference: {fileID: 79649849}
+    - target: {fileID: 8343863162262110181, guid: ce3ba62920762b6489f573377b16fd41, type: 3}
+      propertyPath: reflectModeDuration
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8739540171479968288, guid: ce3ba62920762b6489f573377b16fd41, type: 3}
       propertyPath: m_Name
       value: PlayerController
@@ -2579,6 +2587,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 91779020}
+    - target: {fileID: 4518310028862894954, guid: 4bdde87fd8bc4ab4691992aa0de52548, type: 3}
+      propertyPath: bulletTemplate
+      value: 
+      objectReference: {fileID: 11400000, guid: b6eee3d71656a5246bdaa2c409bdd734, type: 2}
     - target: {fileID: 8137110906746850252, guid: 4bdde87fd8bc4ab4691992aa0de52548, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.23
