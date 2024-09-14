@@ -7,13 +7,22 @@ public class GameManager : MonoBehaviour
 {
     private bool isPaused = false;
 
+    [SerializeField] PlayerController playerController;
     [SerializeField] GameObject pauseMenu;
+    [SerializeField] GameObject deadUI;
 
     public void Start()
     {
+        playerController.OnPlayerDie += PlayerController_OnPlayerDie;
         Time.timeScale = 1;
         isPaused = false;
         pauseMenu.SetActive(false);
+        deadUI.SetActive(false);
+    }
+
+    private void PlayerController_OnPlayerDie(object sender, System.EventArgs e)
+    {
+        deadUI.SetActive(false);
     }
 
     private void Update()
@@ -45,9 +54,18 @@ public class GameManager : MonoBehaviour
         pauseMenu.SetActive(false);
     }
 
+    public void GameOver()
+    {
+        deadUI.SetActive(true);
+    }
+
     public void ReturnToLevelPage()
     {
         SceneManager.LoadScene("StartMenu");
     }
 
+    public void ReloadCurrentScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }

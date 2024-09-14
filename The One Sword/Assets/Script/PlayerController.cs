@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-
-    [SerializeField] BulletSpawner bulletSpawner;
+    public event EventHandler OnPlayerDie;
+    
     [SerializeField] Animator animator;
     [SerializeField] PlayerReflectModeUI playerReflectModeUI;
     [SerializeField] BulletReflect bulletReflect;
@@ -243,8 +243,8 @@ public class PlayerController : MonoBehaviour
                 // 可以在这里添加玩家死亡或其他相关的逻辑
                 if (playerHealth <= 0)
                 {
+                    OnPlayerDie?.Invoke(this, EventArgs.Empty);
                     Debug.Log("Player is dead!");
-
                 }
             }
         }
