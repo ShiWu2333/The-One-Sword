@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +23,8 @@ public class GameManager : MonoBehaviour
 
     private void PlayerController_OnPlayerDie(object sender, System.EventArgs e)
     {
-        deadUI.SetActive(false);
+        Debug.Log("Player is dead");
+        deadUI.SetActive(true);
     }
 
     private void Update()

@@ -1,4 +1,4 @@
-    using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -81,13 +81,14 @@ public class PlayerController : MonoBehaviour
                     reflectModeChargeFill = chargeTimer / reflectModeDuration; //根据倒计时动态降低chargefill
 
                 }
-                else //退出超能模式
+                else if (chargeTimer <= 0)//退出超能模式
                 {
                     canCharge = true;
                     isReflectMode = false;
                     chargeTimer = 0;
                     reflectModeCharge = 0;
-                    Debug.Log("Reflect Mode End!!");
+                    Debug.Log("Reflect Mode End!!"); 
+                    chargeTimer = reflectModeDuration;
                 }
         }
         else
@@ -223,7 +224,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                    hitSword |= false; 
+                    hitSword = false; 
                     }
 
                 }
@@ -244,7 +245,7 @@ public class PlayerController : MonoBehaviour
                 if (playerHealth <= 0)
                 {
                     OnPlayerDie?.Invoke(this, EventArgs.Empty);
-                    Debug.Log("Player is dead!");
+                    //Debug.Log("Player is dead!");
                 }
             }
         }
