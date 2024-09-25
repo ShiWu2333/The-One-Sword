@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerReflectModeUI playerReflectModeUI;
     [SerializeField] BulletReflect bulletReflect;
     [SerializeField] GameObject spawnPoint;
+    [SerializeField] GameObject reflectEffect;
+    [SerializeField] GameObject splashEffect;
 
     //血量相关
     public SpriteRenderer[] hearts;
@@ -170,7 +172,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     
 
     // 检测碰撞，并摧毁子弹
@@ -190,6 +191,8 @@ public class PlayerController : MonoBehaviour
                 {
                     Debug.Log("normal bullet detected");
                     bullet.OnHit(); //如果是普通子弹被攻击直接销毁
+                    Instantiate(reflectEffect, bullet.transform.position, Quaternion.identity); //攻击特效
+                    Instantiate(splashEffect, bullet.transform.position, Quaternion.identity); //击中特效
                     hitSword = true;
 
                     if (isReflectMode) //如果是反弹模式任何攻击都可以反弹

@@ -3358,6 +3358,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8343863162262110181, guid: ce3ba62920762b6489f573377b16fd41, type: 3}
+      propertyPath: reflectEffect
+      value: 
+      objectReference: {fileID: 4525029222144061575, guid: c15a0020cfb838d4bafa869b572db23b, type: 3}
+    - target: {fileID: 8343863162262110181, guid: ce3ba62920762b6489f573377b16fd41, type: 3}
       propertyPath: reflectModeMax
       value: 7
       objectReference: {fileID: 0}
