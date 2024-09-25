@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        isReflectMode = false;
+        isReflectMode = true;
         playerHealth = 3;
         reflectModeCharge = 0;
         canCharge = true;
@@ -73,7 +73,6 @@ public class PlayerController : MonoBehaviour
         if (reflectModeCharge >= reflectModeMax) //进入超能模式
         {
             canCharge = false; //不可以继续叠加能量
-            isReflectMode = true; //可以反弹攻击
             Debug.Log("Refelct Mode!!");
                 if (chargeTimer > 0)
                 {
@@ -113,7 +112,7 @@ public class PlayerController : MonoBehaviour
             {
                 float heldTime = Time.time - buttonPressTime; // 计算按键持续时间
 
-                // 如果按下时间少于等于1秒，发动轻攻击
+                // 如果按下时间少于等于0.3秒，发动轻攻击
                 if (heldTime <= 0.3f)
                 {
                     isHeavyAttack = false;
@@ -187,7 +186,7 @@ public class PlayerController : MonoBehaviour
             BaseBullet bullet = other.GetComponent<BaseBullet>();
             if (bullet != null)
             {
-                if (bullet.bulletType == BaseBullet.BulletType.NomralBullet)
+                if (bullet.bulletType == BaseBullet.BulletType.NomralBullet) //如果击中的是普通子弹
                 {
                     Debug.Log("normal bullet detected");
                     bullet.OnHit(); //如果是普通子弹被攻击直接销毁
@@ -205,7 +204,7 @@ public class PlayerController : MonoBehaviour
                         Debug.Log(reflectModeCharge);
                     };
                 }
-                else if (bullet.bulletType == BaseBullet.BulletType.HeavyBullet) 
+                else if (bullet.bulletType == BaseBullet.BulletType.HeavyBullet) //如果击中的是重型子弹
                 {
                     Debug.Log("heavy bullet detected");
                     
@@ -227,7 +226,8 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                    hitSword = false; 
+                        hitSword = true;
+                        bullet.OnHit();
                     }
 
                 }
