@@ -6,6 +6,7 @@ public class BaseBullet : MonoBehaviour
 {
     public enum BulletType { NomralBullet, HeavyBullet}
     public BulletType bulletType;
+    public float bulletDamage;
 
     // 虚方法，子类可以覆盖这个方法
     public virtual void OnHit()

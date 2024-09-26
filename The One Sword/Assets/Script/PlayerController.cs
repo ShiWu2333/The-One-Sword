@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     public SpriteRenderer[] hearts;
     public Sprite fullHeartSprite; // 满心的图片
     public Sprite emptyHeartSprite; // 空心的图片
-    private int playerHealth; //玩家生命值
+    public float playerHealth; //玩家生命值
 
     //攻击判定相关数据
     public GameObject playerHitbox; //玩家的碰撞体积
@@ -37,19 +37,16 @@ public class PlayerController : MonoBehaviour
     //超能mode相关数据
     private float reflectModeCharge;
     private bool canCharge;
-    [SerializeField] private float reflectModeMax;
-    [SerializeField] float reflectModeDuration;
+    [SerializeField] float reflectModeMax = 100;
     private float reflectModeChargeFill;
-    private float chargeTimer;
+    private float damageBoost;
 
 
     void Start()
     {
         isReflectMode = true;
-        playerHealth = 3;
         reflectModeCharge = 0;
         canCharge = true;
-        chargeTimer = reflectModeDuration; //设置倒计时
 
         hitboxCollider = attackHitbox.GetComponent<Collider2D>();
         if (hitboxCollider != null)
@@ -70,31 +67,34 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("CurentCombo = " + currentCombo);
 
         //玩家超能mode逻辑
-        if (reflectModeCharge >= reflectModeMax) //进入超能模式
+        if (reflectModeCharge >= 0) //进入超能模式
         {
-            canCharge = false; //不可以继续叠加能量
-            Debug.Log("Refelct Mode!!");
-                if (chargeTimer > 0)
-                {
-                    chargeTimer -= Time.deltaTime; //超能模式倒计时
-                    Debug.Log(Time.deltaTime);
-                    Debug.Log("Reflect Mode Time : " + chargeTimer);
-                    reflectModeChargeFill = chargeTimer / reflectModeDuration; //根据倒计时动态降低chargefill
-
-                }
-                else if (chargeTimer <= 0)//退出超能模式
-                {
-                    canCharge = true;
-                    isReflectMode = false;
-                    chargeTimer = 0;
-                    reflectModeCharge = 0;
-                    Debug.Log("Reflect Mode End!!"); 
-                    chargeTimer = reflectModeDuration;
-                }
-        }
-        else
-        {
-            reflectModeChargeFill = reflectModeCharge / reflectModeMax;
+            reflectModeChargeFill = reflectModeCharge / reflectModeMax; // 更新充能的UI, 在玩家被击中的逻辑里，当玩家被击中时，reflectModeCharge就会变成0,当玩家完美击中子弹则会增加reflectModeCharge
+            if (reflectModeCharge >=0 & reflectModeCharge  < 20)
+            {
+                damageBoost = 1;
+            }
+            else if (reflectModeCharge >= reflectModeMax * 1 / 5 &  reflectModeCharge < reflectModeMax * 2 / 5)
+            {
+                damageBoost = 1.2f;
+            }
+            else if (reflectModeCharge >= reflectModeMax * 2 / 5 & reflectModeCharge < reflectModeMax * 3 / 5)
+            {
+                damageBoost = 1.5f;
+            }
+            else if (reflectModeCharge >= reflectModeMax * 3 / 5 & reflectModeCharge < reflectModeMax * 4 / 5)
+            {
+                damageBoost = 2f;
+            }
+            else if (reflectModeCharge >= reflectModeMax * 4 / 5 & reflectModeCharge <= reflectModeMax)
+            {
+                damageBoost = 3f;
+            }
+            if (reflectModeCharge >= reflectModeMax)
+            {
+                canCharge = false;
+            }
+            
         }
         
 
@@ -171,7 +171,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+    void ReflectBullet() // 生成子弹并同时修改 bulletDamage 属性
+    {
+        BaseBullet newBullet = Instantiate(bulletReflect, spawnPoint.transform.position, spawnPoint.transform.rotation)
+                               .GetComponent<BaseBullet>();
+
+        if (newBullet != null)
+        {
+            newBullet.bulletDamage = newBullet.bulletDamage * damageBoost; // 设置新的伤害值
+            newBullet.transform.localScale = newBullet.transform.localScale * damageBoost;
+        }
+    }
 
     // 检测碰撞，并摧毁子弹
 
@@ -196,7 +206,7 @@ public class PlayerController : MonoBehaviour
 
                     if (isReflectMode) //如果是反弹模式任何攻击都可以反弹
                     {
-                        Instantiate(bulletReflect, spawnPoint.transform.position, spawnPoint.transform.rotation);
+                        ReflectBullet();
                     }
                     if (canCharge) //如果可以充能添加充能
                     {
@@ -207,29 +217,23 @@ public class PlayerController : MonoBehaviour
                 else if (bullet.bulletType == BaseBullet.BulletType.HeavyBullet) //如果击中的是重型子弹
                 {
                     Debug.Log("heavy bullet detected");
-                    
+                    Instantiate(reflectEffect, bullet.transform.position, Quaternion.identity); //攻击特效
+                    Instantiate(splashEffect, bullet.transform.position, Quaternion.identity); //击中特效
+                    hitSword = true;
+                    bullet.OnHit();
+
                     if (isReflectMode)
                     {
-                        hitSword = true;
-                        bullet.OnHit();
-                        Instantiate(bulletReflect, spawnPoint.transform.position, spawnPoint.transform.rotation);
+                        ReflectBullet();
                     }
                     else if (isHeavyAttack)
                     {
-                        hitSword = true;
-                        bullet.OnHit();
                         if (canCharge) //如果可以充能添加充能
                         {
                             reflectModeCharge += 1;
                             Debug.Log(reflectModeCharge);
                         };
                     }
-                    else
-                    {
-                        hitSword = true;
-                        bullet.OnHit();
-                    }
-
                 }
             }
         }
@@ -239,7 +243,9 @@ public class PlayerController : MonoBehaviour
             BaseBullet bullet = other.GetComponent<BaseBullet>();
             if (bullet != null)
             {
-                playerHealth -= 1;
+                playerHealth -= bullet.bulletDamage;
+                //reflectModeCharge = 0;
+                //canCharge = true;
                 Debug.Log("Player hit! Remaining health: " + playerHealth);
 
                 Destroy(other.gameObject);

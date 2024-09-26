@@ -64,6 +64,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 8857668776216581822, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857668776216581822, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857668776216581822, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857668776216581822, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8994770880803064820, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
       value: 8
@@ -95,4 +111,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68ebc058a30f2c446a57c5410257bc14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletType: 0
+  bulletDamage: 2
   bulletSpeed: 35

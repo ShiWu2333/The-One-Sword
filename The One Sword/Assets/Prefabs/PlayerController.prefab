@@ -756,8 +756,7 @@ MonoBehaviour:
   playerHitbox: {fileID: 738885921824437126}
   attackHitbox: {fileID: 2378787993615385041}
   perfectHit: {fileID: 0}
-  reflectModeMax: 5
-  reflectModeDuration: 5
+  reflectModeMax: 100
 --- !u!50 &4662667186836938315
 Rigidbody2D:
   serializedVersion: 4
