@@ -76,10 +76,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ebdb60baecbaab40a11d5425bdca5b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentLevel: 0
+  bpm: 0
   bulletType: 0
   bullet: {fileID: 6202358276965810897, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
-  heavyBullet: {fileID: 4479650082036837233, guid: 1de2863e47d39e5469f6cce560c03877, type: 3}
+  heavyBullet: {fileID: 1742416092998610338, guid: cf33aabd6cb980b4fb2c8f2221975aac, type: 3}
   spawnPoint: {fileID: 72794038508804503}
+  audioSource: {fileID: 0}
   maxBulletSpeed: 25
   traMaxHeight: 0.6
   spawnRate: 2
@@ -165,3 +168,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  canSpawn: 0
+  player: {fileID: 0}

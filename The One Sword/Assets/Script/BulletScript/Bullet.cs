@@ -18,6 +18,24 @@ public class NomralBullet : BaseBullet
     private void Start()
     {
         traStartPoint = transform.position;
+        if (target == null)
+        {
+            Debug.LogError("Target is not assigned!");
+            return;
+        }
+
+        if (traAniCurve == null)
+        {
+            Debug.LogError("Trajectory animation curve is not assigned!");
+            return;
+        }
+
+        if (axisCorrectionAniCurve == null)
+        {
+            Debug.LogError("Axis correction animation curve is not assigned!");
+            return;
+        }
+
     }
 
     void Update()

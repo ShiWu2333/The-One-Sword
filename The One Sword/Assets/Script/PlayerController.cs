@@ -8,18 +8,21 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     public event EventHandler OnPlayerDie;
+    public event EventHandler OnPlayerHit;
     
     [SerializeField] Animator animator;
     [SerializeField] PlayerReflectModeUI playerReflectModeUI;
     [SerializeField] BulletReflect bulletReflect;
     [SerializeField] GameObject spawnPoint;
     [SerializeField] GameObject hitEffects;
+    [SerializeField] SpriteRenderer spriteRenderer;
 
     //血量相关
     public SpriteRenderer[] hearts;
     public Sprite fullHeartSprite; // 满心的图片
     public Sprite emptyHeartSprite; // 空心的图片
     public float playerHealth; //玩家生命值
+    private bool playerIsImmune; //玩家是否无敌
 
     //攻击判定相关数据
     public GameObject playerHitbox; //玩家的碰撞体积
@@ -43,6 +46,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        playerIsImmune = false;
         isReflectMode = true;
         reflectModeCharge = 0;
         canCharge = true;
@@ -71,23 +75,23 @@ public class PlayerController : MonoBehaviour
             reflectModeChargeFill = reflectModeCharge / reflectModeMax; // 更新充能的UI, 在玩家被击中的逻辑里，当玩家被击中时，reflectModeCharge就会变成0,当玩家完美击中子弹则会增加reflectModeCharge
             if (reflectModeCharge >=0 & reflectModeCharge  < 20)
             {
-                damageBoost = 1;
+                damageBoost = 1f;
             }
             else if (reflectModeCharge >= reflectModeMax * 1 / 5 &  reflectModeCharge < reflectModeMax * 2 / 5)
             {
-                damageBoost = 1.2f;
+                damageBoost = 1.1f;
             }
             else if (reflectModeCharge >= reflectModeMax * 2 / 5 & reflectModeCharge < reflectModeMax * 3 / 5)
             {
-                damageBoost = 1.5f;
+                damageBoost = 1.3f;
             }
             else if (reflectModeCharge >= reflectModeMax * 3 / 5 & reflectModeCharge < reflectModeMax * 4 / 5)
             {
-                damageBoost = 2f;
+                damageBoost = 1.5f;
             }
             else if (reflectModeCharge >= reflectModeMax * 4 / 5 & reflectModeCharge <= reflectModeMax)
             {
-                damageBoost = 3f;
+                damageBoost = 2f;
             }
             if (reflectModeCharge >= reflectModeMax)
             {
@@ -178,7 +182,7 @@ public class PlayerController : MonoBehaviour
         if (newBullet != null)
         {
             newBullet.bulletDamage = newBullet.bulletDamage * damageBoost; // 设置新的伤害值
-            newBullet.transform.localScale = newBullet.transform.localScale * damageBoost;
+            newBullet.transform.localScale = newBullet.transform.localScale * (damageBoost+0.5f);
         }
     }
 
@@ -193,8 +197,9 @@ public class PlayerController : MonoBehaviour
         {
             // 检查碰撞对象是否为子弹
             BaseBullet bullet = other.GetComponent<BaseBullet>();
-            if (bullet != null)
+            if (bullet != null) //如果集中了子弹
             {
+                OnPlayerHit?.Invoke(this, EventArgs.Empty);
                 if (bullet.bulletType == BaseBullet.BulletType.NomralBullet) //如果击中的是普通子弹
                 {
                     Debug.Log("normal bullet detected");
@@ -240,7 +245,13 @@ public class PlayerController : MonoBehaviour
             BaseBullet bullet = other.GetComponent<BaseBullet>();
             if (bullet != null)
             {
-                playerHealth -= bullet.bulletDamage;
+                if (playerIsImmune == false)
+                {
+                    playerHealth -= bullet.bulletDamage;
+                    playerIsImmune = true;
+
+                    StartCoroutine(RemoveImmunity());
+                }
                 reflectModeCharge = 0;
                 canCharge = true;
                 Debug.Log("Player hit! Remaining health: " + playerHealth);
@@ -255,6 +266,29 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    private IEnumerator RemoveImmunity()
+    {
+        float immunityDuration = 2f;
+        float flashInterval = 0.1f;  // 闪烁间隔
+        float elapsedTime = 0f;
+
+        // 免疫状态期间闪烁
+        while (elapsedTime < immunityDuration)
+        {
+            // 切换颜色：正常显示和透明
+            spriteRenderer.color = new Color(1, 1, 1, 0.6f);  // 变透明
+            yield return new WaitForSeconds(flashInterval / 2);
+            spriteRenderer.color = new Color(1, 1, 1, 1f);    // 恢复原色
+            yield return new WaitForSeconds(flashInterval / 2);
+
+            elapsedTime += flashInterval;
+        }
+
+        // 结束闪烁并恢复正常状态
+        spriteRenderer.color = new Color(1, 1, 1, 1f);
+        playerIsImmune = false;  // 恢复免疫状态
     }
 
     public float GetReflectModeChargeFill()

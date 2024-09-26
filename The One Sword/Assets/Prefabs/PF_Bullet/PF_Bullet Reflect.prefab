@@ -136,6 +136,58 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Bullet Reflect
       objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Time
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0.9496855
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0.91797
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 0.42108685
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].inSlope
+      value: -0.2162588
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].inSlope
+      value: -0.21792696
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].outSlope
+      value: -0.2162588
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].inWeight
+      value: 0.15391785
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].outSlope
+      value: -0.21792696
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].outWeight
+      value: 0.22294779
+      objectReference: {fileID: 0}
     - target: {fileID: 6948024145857574709, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.7071068
@@ -205,5 +257,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletType: 0
-  bulletDamage: 2
+  bulletDamage: 1
   bulletSpeed: 35
