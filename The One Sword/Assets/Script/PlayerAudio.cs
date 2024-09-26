@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReflectEffect : MonoBehaviour
+public class PlayerAudio : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private float destoryTime;
-
     void Start()
     {
-        Destroy(gameObject, destoryTime);
+        
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
 }

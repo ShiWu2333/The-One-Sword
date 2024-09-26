@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class BaseBullet : MonoBehaviour
@@ -14,6 +15,7 @@ public class BaseBullet : MonoBehaviour
         // 默认行为：子弹被击中时销毁
         //Debug.Log("Bullet hit, destroyed.");
         Destroy(gameObject); // 销毁子弹
+
     }
 
     public virtual void ReflectHit()

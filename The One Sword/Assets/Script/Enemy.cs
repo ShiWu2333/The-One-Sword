@@ -25,17 +25,16 @@ public class Enemy : MonoBehaviour
             if (bullet != null)
             {
                 bullet.OnHit();
+                enemyHealthCurrent -= bullet.bulletDamage;
+                enemyHealth.UpdateHealthBar();
+                Debug.Log("Enemy Hit!");
+                if (enemyHealthCurrent <= 0)
+                {
+                    Debug.Log("Enemy is dead!");
+                    bulletSpawner.SetActive(false);
+                }
             }
         }
-        enemyHealthCurrent -= 1;
-        enemyHealth.UpdateHealthBar();
-        Debug.Log("Enemy Hit!");
-        if (enemyHealthCurrent <= 0)
-        {
-            Debug.Log("Enemy is dead!");
-            bulletSpawner.SetActive(false);
-        }
-
     }
 
     public float GetEnemyHealthCurrent()

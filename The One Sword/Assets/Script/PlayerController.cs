@@ -13,8 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerReflectModeUI playerReflectModeUI;
     [SerializeField] BulletReflect bulletReflect;
     [SerializeField] GameObject spawnPoint;
-    [SerializeField] GameObject reflectEffect;
-    [SerializeField] GameObject splashEffect;
+    [SerializeField] GameObject hitEffects;
 
     //血量相关
     public SpriteRenderer[] hearts;
@@ -99,14 +98,14 @@ public class PlayerController : MonoBehaviour
         
 
         // 检测按键按下的时间
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.X))
         {
             buttonPressTime = Time.time; // 记录按下时间
             isPressingButton = true;
         }
 
         // 检测按键松开的时间
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Z) || Input.GetKeyUp(KeyCode.X))
         {
             if (isPressingButton)
             {
@@ -200,8 +199,7 @@ public class PlayerController : MonoBehaviour
                 {
                     Debug.Log("normal bullet detected");
                     bullet.OnHit(); //如果是普通子弹被攻击直接销毁
-                    Instantiate(reflectEffect, bullet.transform.position, Quaternion.identity); //攻击特效
-                    Instantiate(splashEffect, bullet.transform.position, Quaternion.identity); //击中特效
+                    Instantiate(hitEffects, bullet.transform.position, Quaternion.identity); //攻击特效
                     hitSword = true;
 
                     if (isReflectMode) //如果是反弹模式任何攻击都可以反弹
@@ -217,8 +215,7 @@ public class PlayerController : MonoBehaviour
                 else if (bullet.bulletType == BaseBullet.BulletType.HeavyBullet) //如果击中的是重型子弹
                 {
                     Debug.Log("heavy bullet detected");
-                    Instantiate(reflectEffect, bullet.transform.position, Quaternion.identity); //攻击特效
-                    Instantiate(splashEffect, bullet.transform.position, Quaternion.identity); //击中特效
+                    Instantiate(hitEffects, bullet.transform.position, Quaternion.identity); //攻击特效
                     hitSword = true;
                     bullet.OnHit();
 
@@ -244,10 +241,10 @@ public class PlayerController : MonoBehaviour
             if (bullet != null)
             {
                 playerHealth -= bullet.bulletDamage;
-                //reflectModeCharge = 0;
-                //canCharge = true;
+                reflectModeCharge = 0;
+                canCharge = true;
                 Debug.Log("Player hit! Remaining health: " + playerHealth);
-
+                animator.SetTrigger("Hurt");
                 Destroy(other.gameObject);
 
                 // 可以在这里添加玩家死亡或其他相关的逻辑
