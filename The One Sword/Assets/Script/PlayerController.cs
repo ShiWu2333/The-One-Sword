@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     public event EventHandler OnPlayerDie;
-    public event EventHandler OnPlayerHit;
+    public event EventHandler OnPlayerHit; //玩家击中子弹时
+    public event EventHandler OnPlayerDamaged; // 玩家被子弹击中
     
     [SerializeField] Animator animator;
     [SerializeField] PlayerReflectModeUI playerReflectModeUI;
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public Sprite emptyHeartSprite; // 空心的图片
     public float playerHealth; //玩家生命值
     private bool playerIsImmune; //玩家是否无敌
+    private bool playerIsDead; //玩家是否死亡
 
     //攻击判定相关数据
     public GameObject playerHitbox; //玩家的碰撞体积
@@ -47,6 +49,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerIsImmune = false;
+        playerIsDead = false;
         isReflectMode = true;
         reflectModeCharge = 0;
         canCharge = true;
@@ -182,7 +185,7 @@ public class PlayerController : MonoBehaviour
         if (newBullet != null)
         {
             newBullet.bulletDamage = newBullet.bulletDamage * damageBoost; // 设置新的伤害值
-            newBullet.transform.localScale = newBullet.transform.localScale * (damageBoost+0.5f);
+            newBullet.transform.localScale = newBullet.transform.localScale * (damageBoost+0.75f);
         }
     }
 
@@ -245,8 +248,9 @@ public class PlayerController : MonoBehaviour
             BaseBullet bullet = other.GetComponent<BaseBullet>();
             if (bullet != null)
             {
-                if (playerIsImmune == false)
+                if (playerIsImmune == false || playerIsDead == false)
                 {
+                    OnPlayerDamaged?.Invoke(this, EventArgs.Empty);
                     playerHealth -= bullet.bulletDamage;
                     playerIsImmune = true;
 
@@ -259,10 +263,14 @@ public class PlayerController : MonoBehaviour
                 Destroy(other.gameObject);
 
                 // 可以在这里添加玩家死亡或其他相关的逻辑
-                if (playerHealth <= 0)
+                if (playerIsDead == false)
                 {
-                    OnPlayerDie?.Invoke(this, EventArgs.Empty);
-                    //Debug.Log("Player is dead!");
+                    if (playerHealth <= 0)
+                    {
+                        OnPlayerDie?.Invoke(this, EventArgs.Empty);
+                        //Debug.Log("Player is dead!");
+                        playerIsDead = true;
+                    }
                 }
             }
         }

@@ -138,7 +138,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
       propertyPath: m_Time
-      value: 0.15
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
       propertyPath: m_Parameters.colorGradient.key0.b
@@ -200,6 +200,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 8466573049910903572, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8857668776216581822, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.5
@@ -211,6 +215,14 @@ PrefabInstance:
     - target: {fileID: 8857668776216581822, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857668776216581822, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857668776216581822, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8857668776216581822, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -258,4 +270,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletType: 0
   bulletDamage: 1
-  bulletSpeed: 35
+  bulletSpeed: 40

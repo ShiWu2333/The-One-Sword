@@ -14,6 +14,7 @@ public class NomralBullet : BaseBullet
 
     private Vector3 traStartPoint;
     private Vector3 bulletMoveDir;
+    [SerializeField] GameObject trail;
 
     private void Start()
     {

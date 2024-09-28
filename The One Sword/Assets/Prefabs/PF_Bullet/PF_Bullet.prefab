@@ -269,6 +269,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletType: 0
   bulletDamage: 1
+  trail: {fileID: 271066967209357970}
 --- !u!1 &7201562443443280596
 GameObject:
   m_ObjectHideFlags: 0
