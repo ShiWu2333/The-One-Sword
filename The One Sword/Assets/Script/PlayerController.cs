@@ -278,7 +278,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator RemoveImmunity()
     {
-        float immunityDuration = 2f;
+        float immunityDuration = 3f;
         float flashInterval = 0.1f;  // …¡À∏º‰∏Ù
         float elapsedTime = 0f;
 

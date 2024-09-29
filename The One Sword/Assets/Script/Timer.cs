@@ -5,6 +5,7 @@ public class GameTimer : MonoBehaviour
 {
     private float timer;
     private TextMeshProUGUI timerText;
+    [SerializeField] BulletSpawner spawner;
 
     void Start()
     {
@@ -15,14 +16,8 @@ public class GameTimer : MonoBehaviour
 
     void Update()
     {
-        // 每帧增加时间
-        timer += Time.deltaTime;
+        timer = spawner.GetTimeInBeats();
 
-        // 将时间转换为分钟和秒
-        int minutes = Mathf.FloorToInt(timer / 60F);
-        int seconds = Mathf.FloorToInt(timer % 60F);
-
-        // 更新TextMeshPro显示时间
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        timerText.text = timer.ToString("F2");
     }
 }
