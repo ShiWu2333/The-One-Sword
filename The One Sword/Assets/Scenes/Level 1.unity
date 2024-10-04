@@ -1961,7 +1961,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: d574a4debce5f2c4dba6c201192dd4d5, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 98a04384f620eda41b062e5f9ba95dad, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.8
   m_Pitch: 1
@@ -4986,7 +4986,7 @@ PrefabInstance:
       objectReference: {fileID: 775844235}
     - target: {fileID: 4518310028862894954, guid: 4bdde87fd8bc4ab4691992aa0de52548, type: 3}
       propertyPath: currentLevel
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4518310028862894954, guid: 4bdde87fd8bc4ab4691992aa0de52548, type: 3}
       propertyPath: bulletTemplate
@@ -5042,7 +5042,7 @@ PrefabInstance:
       objectReference: {fileID: 1802390244}
     - target: {fileID: 8269438294387528608, guid: 4bdde87fd8bc4ab4691992aa0de52548, type: 3}
       propertyPath: enemyHealthMax
-      value: 180
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
