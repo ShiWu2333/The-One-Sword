@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
                     bullet.OnHit();
                     enemyHealthCurrent -= bullet.bulletDamage;
                     enemyHealth.UpdateHealthBar();
-                    Debug.Log("Enemy Hit!");
+                    //Debug.Log("Enemy Hit!");
                     if (enemyHealthCurrent <= 0)
                     {
                         OnEnemyDie?.Invoke(this, EventArgs.Empty);

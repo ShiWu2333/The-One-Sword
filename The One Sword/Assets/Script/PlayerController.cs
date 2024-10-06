@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject spawnPoint;
     [SerializeField] GameObject hitEffects;
     [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] private float perfectHitDistance; // 可以根据需求调整
+    [SerializeField] private Transform perfectHit; // 定义 perfectHit 的位置，用于精准击中的判定
 
     //血量相关
     public SpriteRenderer[] hearts;
@@ -29,15 +31,17 @@ public class PlayerController : MonoBehaviour
     //攻击判定相关数据
     public GameObject playerHitbox; //玩家的碰撞体积
     public GameObject attackHitbox; // 攻击的碰撞体积
-    public Collider2D perfectHit; //完美格挡点
     private Collider2D hitboxCollider;
     private Collider2D healthCollider;
     private float buttonPressTime; // 记录按键按下的时间
     private bool isPressingButton; // 记录按键是否被按下
     private bool isHeavyAttack;
     private bool isReflectMode;
-    
-    
+    public int attackCombo; //玩家当前连击数
+    public bool isPerfectHit;
+
+
+
     //超能mode相关数据
     private float reflectModeCharge;
     private bool canCharge;
@@ -48,6 +52,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        attackCombo = 0;
         playerIsImmune = false;
         playerIsDead = false;
         isReflectMode = true;
@@ -70,6 +75,8 @@ public class PlayerController : MonoBehaviour
         UpdateHealthUI();//更新玩家血量
         playerReflectModeUI.UpdateChargeFill();//更新超能mode UI
         int currentCombo = animator.GetInteger("Combo");
+
+        //Debug.Log("Imunity state is " + playerIsImmune);
         //Debug.Log("CurentCombo = " + currentCombo);
 
         //玩家超能mode逻辑
@@ -195,30 +202,76 @@ public class PlayerController : MonoBehaviour
     {
         //Debug.Log("bullet is detected");
         bool hitSword = false;
+        
 
         if (hitboxCollider.enabled)
         {
-            // 检查碰撞对象是否为子弹
-            BaseBullet bullet = other.GetComponent<BaseBullet>();
-            if (bullet != null) //如果集中了子弹
+            // 获取所有在hitbox中的子弹并找到最近的一个
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(hitboxCollider.bounds.center, hitboxCollider.bounds.size, 0);
+            BaseBullet nearestBullet = null;
+            float minDistance = float.MaxValue;
+
+            foreach (Collider2D collider in colliders)
             {
-                OnPlayerHit?.Invoke(this, EventArgs.Empty);
+                BaseBullet bullet = collider.GetComponent<BaseBullet>();
+                if (bullet != null)
+                {
+                    float distance = Vector2.Distance(transform.position, bullet.transform.position);
+                    if (distance < minDistance)
+                    {
+                        nearestBullet = bullet;
+                        minDistance = distance;
+                    }
+                }
+            }
+
+            if (nearestBullet != null && nearestBullet == other.GetComponent<BaseBullet>())
+            {
+                BaseBullet bullet = nearestBullet;
+
+                float distanceToPerfectHit = Vector2.Distance(perfectHit.position, bullet.transform.position); //检测子弹到完美击中点的距离
+                if (distanceToPerfectHit < perfectHitDistance) //设定是否是完美击中
+                {
+                    isPerfectHit = true;
+                }
+                else
+                {
+                    isPerfectHit = false;
+                }
+
+                OnPlayerHit?.Invoke(this, EventArgs.Empty); //击中了子弹
+                attackCombo += 1;
+                Debug.Log("Current Attack Combo = " +  attackCombo);
+
+
+
                 if (bullet.bulletType == BaseBullet.BulletType.NomralBullet) //如果击中的是普通子弹
                 {
-                    Debug.Log("normal bullet detected");
+                    //Debug.Log("normal bullet detected");
                     bullet.OnHit(); //如果是普通子弹被攻击直接销毁
                     Instantiate(hitEffects, bullet.transform.position, Quaternion.identity); //攻击特效
                     hitSword = true;
+                    //Debug.Log("Bullet Hit Distance is " + distanceToPerfectHit);
 
+                    if (canCharge) //如果可以充能添加充能
+                    {
+                        if (isPerfectHit) // 如果是精准击中
+                        {
+                            reflectModeCharge += 3;
+                            //Debug.Log("Perfect Hit!");
+                            // 在这里执行精准击中的逻辑，比如加分或特殊效果
+                        }
+                        else //普通命中
+                        {
+                            reflectModeCharge += 1;
+                            //Debug.Log("Normal hIT...");
+                        }
+                    }
+                    
                     if (isReflectMode) //如果是反弹模式任何攻击都可以反弹
                     {
                         ReflectBullet();
                     }
-                    if (canCharge) //如果可以充能添加充能
-                    {
-                        reflectModeCharge += 1;
-                        Debug.Log(reflectModeCharge);
-                    };
                 }
                 else if (bullet.bulletType == BaseBullet.BulletType.HeavyBullet) //如果击中的是重型子弹
                 {
@@ -235,31 +288,42 @@ public class PlayerController : MonoBehaviour
                     {
                         if (canCharge) //如果可以充能添加充能
                         {
-                            reflectModeCharge += 1;
-                            Debug.Log(reflectModeCharge);
-                        };
+                            if (isPerfectHit) // 如果是精准击中
+                            {
+                                reflectModeCharge += 3;
+                                //Debug.Log("Perfect Hit!");
+                                // 在这里执行精准击中的逻辑，比如加分或特殊效果
+                            }
+                            else //普通命中
+                            {
+                                reflectModeCharge += 1;
+                                //Debug.Log("Normal hIT...");
+                            }
+                        }
                     }
                 }
             }
         }
 
-        if (!hitSword && healthCollider.enabled)
+        if (!hitSword && healthCollider.enabled) 
         {
             BaseBullet bullet = other.GetComponent<BaseBullet>();
             if (bullet != null)
             {
-                if (playerIsImmune == false || playerIsDead == false)
+                if (playerIsImmune == false) //玩家被击中
                 {
                     OnPlayerDamaged?.Invoke(this, EventArgs.Empty);
                     playerHealth -= bullet.bulletDamage;
                     playerIsImmune = true;
+                    attackCombo = 0;
 
                     StartCoroutine(RemoveImmunity());
+                    reflectModeCharge = 0;
+                    canCharge = true;
+                    Debug.Log("Player hit! Remaining health: " + playerHealth);
+                    animator.SetTrigger("Hurt");
                 }
-                reflectModeCharge = 0;
-                canCharge = true;
-                Debug.Log("Player hit! Remaining health: " + playerHealth);
-                animator.SetTrigger("Hurt");
+
                 Destroy(other.gameObject);
 
                 // 可以在这里添加玩家死亡或其他相关的逻辑
@@ -278,14 +342,17 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator RemoveImmunity()
     {
-        float immunityDuration = 3f;
-        float flashInterval = 0.1f;  // 闪烁间隔
+        float immunityDuration = 3f;    // 免疫时长
+        float flashInterval = 0.1f;     // 闪烁间隔
         float elapsedTime = 0f;
+
+        // 进入免疫状态
+        playerIsImmune = true;
 
         // 免疫状态期间闪烁
         while (elapsedTime < immunityDuration)
         {
-            // 切换颜色：正常显示和透明
+            // 切换颜色：透明与正常
             spriteRenderer.color = new Color(1, 1, 1, 0.6f);  // 变透明
             yield return new WaitForSeconds(flashInterval / 2);
             spriteRenderer.color = new Color(1, 1, 1, 1f);    // 恢复原色
@@ -296,7 +363,9 @@ public class PlayerController : MonoBehaviour
 
         // 结束闪烁并恢复正常状态
         spriteRenderer.color = new Color(1, 1, 1, 1f);
-        playerIsImmune = false;  // 恢复免疫状态
+
+        // 免疫时间结束，关闭免疫状态
+        playerIsImmune = false;
     }
 
     public float GetReflectModeChargeFill()

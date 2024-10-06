@@ -279,6 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b9ac85754f044d459a9ff4c939ca525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawner: {fileID: 0}
 --- !u!114 &45607896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1960,7 +1961,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 29a2055a8b9b1f540a66d0ab38cd240e, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 98a04384f620eda41b062e5f9ba95dad, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.8
   m_Pitch: 1
@@ -2081,7 +2082,7 @@ MonoBehaviour:
   playerDeadTransitionDuration: 2
   enemyDeadTransitionDuration: 1
   enemyDeadPitch: 1.5
-  delayTime: 2
+  delayTime: 2.1
 --- !u!1 &876245125
 GameObject:
   m_ObjectHideFlags: 0
@@ -4980,6 +4981,10 @@ PrefabInstance:
       propertyPath: bulletTemplate
       value: 
       objectReference: {fileID: 11400000, guid: 315e3834b6f2c044aa9bd55f9ba23d42, type: 2}
+    - target: {fileID: 4518310028862894954, guid: 4bdde87fd8bc4ab4691992aa0de52548, type: 3}
+      propertyPath: HeavyBulletThreshold
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8137110906746850252, guid: 4bdde87fd8bc4ab4691992aa0de52548, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.23
@@ -5026,7 +5031,7 @@ PrefabInstance:
       objectReference: {fileID: 1802390244}
     - target: {fileID: 8269438294387528608, guid: 4bdde87fd8bc4ab4691992aa0de52548, type: 3}
       propertyPath: enemyHealthMax
-      value: 10
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
