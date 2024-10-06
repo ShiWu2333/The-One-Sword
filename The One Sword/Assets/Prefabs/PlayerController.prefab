@@ -361,7 +361,7 @@ Transform:
   m_GameObject: {fileID: 1865519636300309433}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.43, y: 0.61, z: 0}
+  m_LocalPosition: {x: 0.48, y: 0.66, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -678,8 +678,8 @@ Transform:
   m_GameObject: {fileID: 5933668514866759818}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.66, y: 0.59, z: 0}
-  m_LocalScale: {x: 0.1537852, y: 0.12357, z: 0.12357}
+  m_LocalPosition: {x: 0.61, y: 0.67, z: 0}
+  m_LocalScale: {x: 0.14084868, y: 0.14335904, z: 0.11317521}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5171488232236936371}
@@ -1019,6 +1019,8 @@ MonoBehaviour:
   playerHealth: 3
   playerHitbox: {fileID: 738885921824437126}
   attackHitbox: {fileID: 2378787993615385041}
+  attackCombo: 0
+  isPerfectHit: 0
   reflectModeMax: 100
 --- !u!50 &4662667186836938315
 Rigidbody2D:
