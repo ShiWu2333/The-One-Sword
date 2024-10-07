@@ -11,8 +11,6 @@ Material:
   m_Shader: {fileID: 10101, guid: 0000000000000000e000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _ALPHAPREMULTIPLY_ON
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _ALPHABLEND_ON
