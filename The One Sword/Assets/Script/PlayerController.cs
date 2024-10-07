@@ -305,7 +305,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (!hitSword && healthCollider.enabled) 
+        if (hitSword == false && healthCollider.enabled) 
         {
             BaseBullet bullet = other.GetComponent<BaseBullet>();
             if (bullet != null)

@@ -149,6 +149,14 @@ PrefabInstance:
       value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
+      propertyPath: m_ApplyActiveColorSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603106308566946935, guid: f26dd2112ea27f54f9eb15b250aa5d81, type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
       value: 0.30398232
       objectReference: {fileID: 0}

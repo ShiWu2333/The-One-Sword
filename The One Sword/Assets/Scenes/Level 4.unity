@@ -1903,7 +1903,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -3
   m_Sprite: {fileID: 21300000, guid: 2141963c28817c945bcecc252f255624, type: 3}
-  m_Color: {r: 0.81761, g: 0.1516949, b: 0.1516949, a: 0.9372549}
+  m_Color: {r: 0.9496855, g: 0.5763814, b: 0.5763814, a: 0.9372549}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5245,7 +5245,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8343863162262110181, guid: ce3ba62920762b6489f573377b16fd41, type: 3}
       propertyPath: playerHealth
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8343863162262110181, guid: ce3ba62920762b6489f573377b16fd41, type: 3}
       propertyPath: splashEffect
